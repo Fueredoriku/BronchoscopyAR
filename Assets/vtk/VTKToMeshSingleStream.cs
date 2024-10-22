@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
-using static Unity.Mathematics.math;
 using UnityEngine;
 using UnityEngine.Rendering;
-using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
+using static Unity.Mathematics.math;
 
 
 public struct SingleStream : IMeshStream
@@ -20,10 +19,11 @@ public struct SingleStream : IMeshStream
         public float4 tangent;
         public float2 texCoord;
     }
-
+    [NativeDisableContainerSafetyRestriction]
     NativeArray<Stream0> stream0;
-    NativeArray<int3> triangles;
-    public void Setup(Mesh.MeshData meshData, int vertexCount, int indexCount)
+    [NativeDisableContainerSafetyRestriction]
+    NativeArray<TriangleUInt16> triangles;
+    public void Setup(Mesh.MeshData meshData, Bounds bounds, int vertexCount, int indexCount)
     {
         var descriptor = new NativeArray<VertexAttributeDescriptor>(
             4, Allocator.Temp, NativeArrayOptions.UninitializedMemory
@@ -41,13 +41,20 @@ public struct SingleStream : IMeshStream
         meshData.SetVertexBufferParams(vertexCount, descriptor);
         descriptor.Dispose();
 
-        meshData.SetIndexBufferParams(indexCount, IndexFormat.UInt32);
+        meshData.SetIndexBufferParams(indexCount, IndexFormat.UInt16);
 
         meshData.subMeshCount = 1;
-        meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCount));
+        meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCount)
+        {
+            bounds = bounds,
+            vertexCount = vertexCount
+        },
+            MeshUpdateFlags.DontRecalculateBounds |
+            MeshUpdateFlags.DontValidateIndices);
 
         stream0 = meshData.GetVertexData<Stream0>();
-        triangles = meshData.GetIndexData<int>().Reinterpret<int3>(4);
+        triangles = meshData.GetIndexData<ushort>()
+            .Reinterpret<TriangleUInt16>(2);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
