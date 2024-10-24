@@ -203,12 +203,12 @@ SDF_Surface map_float(float3 position)
 
 	// Add distance functions to add/mix shapes
 	//float distance_torus = length(vec2(length(position.xz) - .5, position.y)) - .1;
-	position = float3(position.x+ sin(position.y*10. + iTime)*0.1, position.y, position.z);
-	//position = vec3(position.x, position.y, position.z);
+    position = float3(fmod(position.x, 2.0) + sin(position.y * 10. + iTime) * 0.1, position.y - 2.5, fmod(position.z, 1.));
+    position = float3(position.x + 1., position.y, position.z + 0.5);
 	//position *= rotateY(TIME);
     material1 = MaterialInit_float(1.0, 0.4, 0.1, 1.0);
     material2 = MaterialInit_float(1.0, 1.0, 0.8, 1.0);
-
+ 
     float distance_eyeball = length(position) - 0.2;
     float distance_lens = length(position * 1.1 - float3(0., 0., 0.08)) - 0.15;
     float distance_pupil = length(position * float3(1.25, 1.25, 1.3) - float3(0., 0., 0.22)) - 0.05 * (1.2 + abs(sin(iTime) * 0.1));

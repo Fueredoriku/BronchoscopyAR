@@ -18,7 +18,7 @@ public class VTKParser : MonoBehaviour
     private List<Vector3> normals;
     public static int NormalCount = 0;
     private List<float> scalars;
-
+    private VTKSection currentSection;
 
     private enum VTKSection
     {
@@ -30,21 +30,44 @@ public class VTKParser : MonoBehaviour
         Scalars
     }
 
-    void Awake()
+    void Start()
     {
-        binaryResource = Resources.Load("bronch") as TextAsset;
+        //binaryResource = Resources.Load("bronch") as TextAsset;
         vertices = new List<Vector3>();
         triangles = new List<int>();
         normals = new List<Vector3>();
         //scalars = new List<float>();
 
-        ParseVTKFile(binaryResource);
+        //ParseVTKFile(binaryResource);
+        ParseProcessedData();
     }
 
+    void ParseProcessedData()
+    {
+        var binaryVertices = Resources.Load("vertices") as TextAsset;
+        string[] vertLines = Regex.Split(binaryVertices.text, "\r\n|\r|\n");
+        for (int i = 0; i < vertLines.Length; i++)
+        {
+            ParsePoints(vertLines[i]);
+        }
+
+        var binarytriangles = Resources.Load("triangles") as TextAsset;
+        string[] triangleLines = Regex.Split(binarytriangles.text, "\r\n|\r|\n");
+        for (int i = 0; i < triangleLines.Length; i++)
+        {
+            ParsePolygons(triangleLines[i]);
+        }
+        VertexCount = vertices.Count;
+        NormalCount = 0;
+        TriangleCount = triangles.Count;
+        // Optionally create a mesh
+        CreateMesh();
+        //GenerateMesh();
+    }
     void ParseVTKFile(TextAsset text)
     {
         string[] lines = Regex.Split(text.text, "\r\n|\r|\n");
-        VTKSection currentSection = VTKSection.None;
+        currentSection = VTKSection.None;
         for (int i = 0; i < lines.Length; i++)
         {
             string line = lines[i];
@@ -95,27 +118,26 @@ public class VTKParser : MonoBehaviour
         NormalCount = normals.Count;
         TriangleCount = triangles.Count;
         // Optionally create a mesh
-        //CreateMesh();
-        GenerateMesh();
+        CreateMesh();
+        //GenerateMesh();
         Debug.Log($"Found {VertexCount} vertices, {NormalCount} normals, and {TriangleCount/3} triangles!");
     }
 
     void ParsePoints(string line)
     {
-        string[] pointValues = line.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-        for (int i = 0; i < pointValues.Length; i += 3)
-        {
-            float x = float.Parse(pointValues[i], CultureInfo.InvariantCulture);
-            float y = float.Parse(pointValues[i + 1], CultureInfo.InvariantCulture);
-            float z = float.Parse(pointValues[i + 2], CultureInfo.InvariantCulture);
-            vertices.Add(new Vector3(x, y, z));
-        }
+        string[] pointValues = line.Split(new[] { ',',' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+        if (pointValues.Length < 3)
+            return;
+        float x = float.Parse(pointValues[0], CultureInfo.InvariantCulture);
+        float y = float.Parse(pointValues[1], CultureInfo.InvariantCulture);
+        float z = float.Parse(pointValues[2], CultureInfo.InvariantCulture);
+        vertices.Add(new Vector3(x, y, z));
     }
 
     void ParsePolygons(string line)
     {
-        string[] polygonValues = line.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-        for (int i = 1; i < polygonValues.Length; i++)
+        string[] polygonValues = line.Split(new[] { ',', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < polygonValues.Length; i++)
         {
             try
             {
@@ -123,6 +145,7 @@ public class VTKParser : MonoBehaviour
             }
             catch 
             {
+                Debug.Log("Found trash:" + polygonValues[i] + " in "+ line);
                 return;
             }
         }
@@ -142,6 +165,7 @@ public class VTKParser : MonoBehaviour
             }
             catch
             {
+                Debug.Log("Found trash:" + normalValues[i]);
                 return;
             }
         }
@@ -179,6 +203,7 @@ public class VTKParser : MonoBehaviour
 
     private void GenerateMesh()
     {
+        Debug.Log("First index = " + triangles[0] + " second " + triangles[1]);
         Mesh mesh = new Mesh
         {
             vertices = vertices.ToArray(),
