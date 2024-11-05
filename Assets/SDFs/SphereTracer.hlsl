@@ -10,9 +10,6 @@ float iTime;
 //uniform sampler2D depth_texture : source_color, hint_depth_texture;
 //uniform bool isDebug = false;
 
-const float max_distance_base = 100.;
-const int max_steps = 256;
-
 struct Material
 {
     float ambient;
@@ -238,12 +235,12 @@ SDF_Surface march_float(float3 cam_pos, float3 cam_rot, float depth)
     float step_distance_previous;
     float3 position = cam_pos;
     float min_distance = 0.001;
-    float max_distance = min(max_distance_base, depth);
+    float max_distance = depth;
     SDF_Surface result;
 
     bool relaxed = true;
 
-    for (int steps = 0; steps < max_steps; steps++)
+    for (int steps = 0; steps < 256; steps++)
     {
         float3 new_position = cam_pos + dist * cam_rot;
         result = map_float(new_position);
@@ -281,21 +278,31 @@ float3 phong_float(float3 light_direction, float3 normal, float3 camera_directio
     return diffuse + specular;
 }
 
-void fragmentOutput_float(float depth, float2 UV, float3 world_position, float3 world_camera, float itime, bool isDebug, out float4 fragOut)
+float LinearEyeDepth_float(float depth, float nearClip, float farClip)
+{
+    // Convert the non-linear depth to linear depth
+    float linearDepth = (2.0 * nearClip * farClip) / (farClip + nearClip - depth * (farClip - nearClip));
+    return linearDepth;
+}
+float LinearToDepth_float(float linearDepth)
+{
+    return (1.0 - _ZBufferParams.w * linearDepth) / (linearDepth * _ZBufferParams.z);
+}
+void fragmentOutput_float(float depth, float2 UV, float3 world_position, float3 world_camera, float3 camera_direction, float itime, bool isDebug, out float4 fragOut)
 {
     iTime = itime;
 	// Read the scene depth for proper culling with rasterized scene
     //float depth = texture(depth_texture, SCREEN_UV).x;
-    float3 ndc = float3(UV * 2.0 - 1.0, depth);
-    float4 view = mul(UNITY_MATRIX_IT_MV, float4(ndc, 1.0));
-    view.xyz /= view.w;
-    float linear_depth = -view.z;
-
-    float3 camera_direction = normalize(world_position - world_camera);
+    //float3 ndc = float3(UV * 2.0 - 1.0, depth);
+    //float4 view = mul(float4(ndc, 1.0), unity_CameraInvProjection);
+    //view.xyz /= view.w;
+    float linear_depth = depth;//LinearToDepth_float(depth); //-view.z;
+    float3 position = (float4(world_position, 1.)).xyz;
     SDF_Surface result;
+    camera_direction = normalize(world_position - world_camera); //mul(float3(0, 0, -1), (float3x3) UNITY_MATRIX_V); //(float4(normalize(-world_camera), 1.)).xyz;
+    
     if (isDebug)
     {
-        float3 position = (float4(world_position, 1.)).xyz;
         result = map_float(position);
         result.material.specular = 0.;
         result.material.ambient = 1.;
@@ -306,12 +313,11 @@ void fragmentOutput_float(float depth, float2 UV, float3 world_position, float3 
     }
     else
     {
-        result = march_float(world_camera, camera_direction, linear_depth);
-        float max_distance = min(max_distance_base, linear_depth);
-        if (result.signed_distance >= max_distance)
+        float max_distance = min(256, depth);
+        result = march_float(world_camera, camera_direction, max_distance);
+        if (result.signed_distance > max_distance)
         {
-            fragOut = float4(0., 0., 0., 0.);
-
+            fragOut = float4(0, 0., 0., 0.);
         }
         else
         {
