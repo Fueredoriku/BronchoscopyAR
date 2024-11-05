@@ -317,7 +317,7 @@ void fragmentOutput_float(float depth, float2 UV, float3 world_position, float3 
         result = march_float(world_camera, camera_direction, max_distance);
         if (result.signed_distance > max_distance)
         {
-            fragOut = float4(0, 0., 0., 0.);
+            fragOut = float4(0., 0., 0., 0.);
         }
         else
         {

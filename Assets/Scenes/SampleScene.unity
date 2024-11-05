@@ -196,7 +196,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 1ac8055a33e0a9643b0ac18bb3c225ae, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -613,6 +613,7 @@ GameObject:
   - component: {fileID: 963194230}
   - component: {fileID: 963194229}
   - component: {fileID: 963194233}
+  - component: {fileID: 963194234}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -637,8 +638,8 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -783,7 +784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
+  m_RequiresDepthTextureOption: 1
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
@@ -814,6 +815,19 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &963194234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaa958f15a5330d439c036cba648e023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outputTexture: {fileID: 0}
 --- !u!1001 &1003438436
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -884,7 +898,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfef4658f900cda4d9423d8c6690a904, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1144,7 +1158,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 96285a90b31354847aee1d69250d9ef4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1183,7 +1197,7 @@ Transform:
   m_GameObject: {fileID: 1499420352}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.25, y: 2.41, z: -4.64}
+  m_LocalPosition: {x: -3.25, y: 2.447, z: -10.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1290,8 +1304,8 @@ Transform:
   m_GameObject: {fileID: 1579480468}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.025740957, z: -0, w: -0.99966866}
-  m_LocalPosition: {x: -1.59, y: 2.43, z: -2.91}
-  m_LocalScale: {x: 4.72, y: 4.72, z: 4.72}
+  m_LocalPosition: {x: -1.139, y: 2.43, z: -7.924}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
