@@ -288,10 +288,6 @@ float LinearToDepth_float(float linearDepth)
 {
     return (1.0 - _ZBufferParams.w * linearDepth) / (linearDepth * _ZBufferParams.z);
 }
-void LinearToDepthUtil_float(float depth, out float linearDepth)
-{
-    linearDepth = (1.0 - _ZBufferParams.w * depth) / (depth * _ZBufferParams.z);
-}
 void fragmentOutput_float(float depth, float2 UV, float3 world_position, float3 world_camera, float3 camera_direction, float itime, bool isDebug, out float4 fragOut)
 {
     iTime = itime;
