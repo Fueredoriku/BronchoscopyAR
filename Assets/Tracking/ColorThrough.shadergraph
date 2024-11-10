@@ -59,34 +59,6 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
-                    "m_Id": "cb82305dfa6b4f35ad668214cf00c7c9"
-                },
-                "m_SlotId": 3
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "fc23b70dc464406097f014df8587c565"
-                },
-                "m_SlotId": 2
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "cb82305dfa6b4f35ad668214cf00c7c9"
-                },
-                "m_SlotId": 4
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "fc23b70dc464406097f014df8587c565"
-                },
-                "m_SlotId": 3
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
                     "m_Id": "d963063084d942f491ea420ca0ae7545"
                 },
                 "m_SlotId": 1
@@ -110,6 +82,20 @@
                     "m_Id": "0f78eb1aeeff493dae32bea6c3eaa680"
                 },
                 "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "fc23b70dc464406097f014df8587c565"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "71f81589cd0047c5a3127a33388eb7b0"
+                },
+                "m_SlotId": 1
             }
         }
     ],
@@ -398,36 +384,6 @@
         "y": 0.0,
         "z": 0.0
     }
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "7c49045d970c4de78ed04e1f036d154b",
-    "m_Id": 3,
-    "m_DisplayName": "farClip",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "farClip",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "849162d5e0cd49afbc6e4fbbd53b5296",
-    "m_Id": 2,
-    "m_DisplayName": "nearClip",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "nearClip",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
 }
 
 {
@@ -958,7 +914,7 @@
     "m_Group": {
         "m_Id": ""
     },
-    "m_Name": "LinearEyeDepth (Custom Function)",
+    "m_Name": "LinearToDepthUtil (Custom Function)",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -972,12 +928,6 @@
     "m_Slots": [
         {
             "m_Id": "4b67c08737234605abc1b3d99863212a"
-        },
-        {
-            "m_Id": "849162d5e0cd49afbc6e4fbbd53b5296"
-        },
-        {
-            "m_Id": "7c49045d970c4de78ed04e1f036d154b"
         },
         {
             "m_Id": "6a4ae69def0140ee988ad2419809da52"
@@ -994,8 +944,8 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_SourceType": 1,
-    "m_FunctionName": "LinearEyeDepth",
+    "m_SourceType": 0,
+    "m_FunctionName": "LinearToDepthUtil",
     "m_FunctionSource": "250e05f63d2ec614bb9130d67b938022",
     "m_FunctionBody": "// Convert the non-linear depth to linear depth\r\nlinearDepth = (2.0 * nearClip * farClip) / (farClip + nearClip - depth * (farClip - nearClip));\r"
 }
