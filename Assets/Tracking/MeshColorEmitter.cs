@@ -30,7 +30,7 @@ public class MeshColorEmitter : MonoBehaviour
                 colorObject.transform.position = spawnPoint.position;
                 colorObject.transform.SetParent(objectPool.transform);
             }
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
 
