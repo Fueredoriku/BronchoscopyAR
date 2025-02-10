@@ -28,6 +28,7 @@ Material:
   - _DIRECTIONAL_LIGHT
   - _DISABLE_ALBEDO_MAP
   - _HOVER_LIGHT
+  - _LOCAL_SPACE_TRIPLANAR_MAPPING
   - _NORMAL_MAP
   - _SPECULAR_HIGHLIGHTS
   - _TRIPLANAR_MAPPING
@@ -147,7 +148,7 @@ Material:
     - _EnableChannelMap: 0
     - _EnableEmission: 0
     - _EnableHoverColorOverride: 0
-    - _EnableLocalSpaceTriplanarMapping: 0
+    - _EnableLocalSpaceTriplanarMapping: 1
     - _EnableNormalMap: 1
     - _EnableProximityLightColorOverride: 0
     - _EnableSSAA: 0

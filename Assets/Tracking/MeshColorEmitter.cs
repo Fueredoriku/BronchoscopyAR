@@ -16,6 +16,8 @@ public class MeshColorEmitter : MonoBehaviour
 
     public void SpawnColoring()
     {
+        if (objectPool) 
+            Destroy(objectPool);
         isSpawning = true;
         objectPool = new("objectPool");
         StartCoroutine(Spawner());
@@ -37,6 +39,5 @@ public class MeshColorEmitter : MonoBehaviour
     public void StopColoring()
     {
         isSpawning = false;
-        Destroy(objectPool);
     }
 }

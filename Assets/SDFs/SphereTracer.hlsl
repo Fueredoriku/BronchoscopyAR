@@ -288,6 +288,14 @@ float LinearToDepth_float(float linearDepth)
 {
     return (1.0 - _ZBufferParams.w * linearDepth) / (linearDepth * _ZBufferParams.z);
 }
+void ComputeWorldSpacePosition_float(float2 uv, float rawDepth, out float3 position)
+{
+    float4 clipPos = float4(uv * 2. - 1., rawDepth, 1.);
+    float4 viewPos = mul(unity_CameraInvProjection, clipPos);
+    viewPos.xyz /= viewPos.w; // Perspective divide
+    position = mul(unity_CameraToWorld, viewPos).xyz;
+}
+
 void LinearToDepthUtil_float(float depth, out float linearDepth)
 {
     linearDepth = (1.0 - _ZBufferParams.w * depth) / (depth * _ZBufferParams.z);
