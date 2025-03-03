@@ -10,6 +10,11 @@ public class HUDController : MonoBehaviour
     private Transform orientationGizmo;
     [SerializeField]
     private Renderer gizmoMesh;
+    [SerializeField]
+    private GameObject[] layer1;
+    [SerializeField]
+    private GameObject[] layer2;
+    private int mode = 0;
 
     //TODO:
     // - reset button above gizmo
@@ -24,10 +29,40 @@ public class HUDController : MonoBehaviour
     public void EnableOrientationGizmo()
     {
         gizmoMesh.enabled = true;
+        ToggleLayers(mode);
+        mode++;
+        if (mode >= 3)
+            mode = 0;
     }
 
     public void DisableOrientationGizmo()
     {
         gizmoMesh.enabled = false;
+    }
+
+    private void ToggleLayers(int mode)
+    {
+        switch (mode)
+        {
+            case 0:
+                foreach (var layer in layer1)
+                    layer.SetActive(false);
+                foreach (var layer2 in layer2)
+                    layer2.SetActive(false);
+                break;
+            case 1:
+                foreach (var layer in layer1)
+                    layer.SetActive(true);
+                foreach (var layer2 in layer2)
+                    layer2.SetActive(false);
+                break;
+            case 2:
+                foreach (var layer in layer1)
+                    layer.SetActive(true);
+                foreach (var layer2 in layer2)
+                    layer2.SetActive(true);
+                break;
+        }
+
     }
 }
