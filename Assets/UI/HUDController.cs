@@ -10,6 +10,7 @@ public class HUDController : MonoBehaviour
     private Transform orientationGizmo;
     [SerializeField]
     private Renderer gizmoMesh;
+    private Vector3 gizmoScaleOriginal;
     [SerializeField]
     private GameObject[] layer1;
     [SerializeField]
@@ -25,9 +26,14 @@ public class HUDController : MonoBehaviour
         transform.position = trackedObject.position;
         orientationGizmo.rotation = trackedObject.rotation;
     }
-
+    private void Start()
+    {
+        gizmoScaleOriginal = gizmoMesh.transform.localScale;
+    }
     public void EnableOrientationGizmo()
     {
+        gizmoMesh.transform.localScale = Vector3.zero;
+        LeanTween.scale(gizmoMesh.gameObject, gizmoScaleOriginal, 0.5f).setEaseInOutElastic();
         gizmoMesh.enabled = true;
         ToggleLayers(mode);
         mode++;
