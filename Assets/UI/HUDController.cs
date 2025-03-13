@@ -24,6 +24,7 @@ public class HUDController : MonoBehaviour
     private void Update()
     {
         transform.position = trackedObject.position;
+        transform.localScale = trackedObject.localScale;
         orientationGizmo.rotation = trackedObject.rotation;
     }
     private void Start()
@@ -37,7 +38,7 @@ public class HUDController : MonoBehaviour
         gizmoMesh.enabled = true;
         ToggleLayers(mode);
         mode++;
-        if (mode >= 3)
+        if (mode >= 4)
             mode = 0;
     }
 
@@ -63,6 +64,12 @@ public class HUDController : MonoBehaviour
                     layer2.SetActive(false);
                 break;
             case 2:
+                foreach (var layer in layer1)
+                    layer.SetActive(false);
+                foreach (var layer2 in layer2)
+                    layer2.SetActive(true);
+                break;
+            case 3:
                 foreach (var layer in layer1)
                     layer.SetActive(true);
                 foreach (var layer2 in layer2)

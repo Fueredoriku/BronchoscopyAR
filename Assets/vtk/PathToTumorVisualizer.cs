@@ -68,7 +68,7 @@ public class PathToTumorVisualizer : MonoBehaviour
         VertexCount = vertices.Count;
         NormalCount = 0;
         TriangleCount = triangles.Count;
-        var sampledVertices = vertices.Where((item, index) => (index + 1) % 5 == 0).ToArray();
+        var sampledVertices = vertices.Where((item, index) => (index + 1) % 10 == 0).ToArray();
         positionBuffer = new VFXTextureFormatter(sampledVertices.Length);
         positionBuffer.setValues(sampledVertices);
         positionBuffer.ApplyChanges();
