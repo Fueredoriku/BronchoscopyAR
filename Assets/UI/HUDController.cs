@@ -16,6 +16,8 @@ public class HUDController : MonoBehaviour
     [SerializeField]
     private GameObject[] layer2;
     private int mode = 0;
+    [SerializeField]
+    private GameObject[] faceUserUI;
 
     //TODO:
     // - reset button above gizmo
@@ -26,6 +28,9 @@ public class HUDController : MonoBehaviour
         transform.position = trackedObject.position;
         transform.localScale = trackedObject.localScale;
         orientationGizmo.rotation = trackedObject.rotation;
+        foreach(var ui in faceUserUI)
+            if (ui.activeInHierarchy)
+                ui.transform.LookAt(Camera.main.transform.position);
     }
     private void Start()
     {
@@ -36,7 +41,6 @@ public class HUDController : MonoBehaviour
         gizmoMesh.transform.localScale = Vector3.zero;
         LeanTween.scale(gizmoMesh.gameObject, gizmoScaleOriginal, 0.5f).setEaseInOutElastic();
         gizmoMesh.enabled = true;
-        ToggleLayers(mode);
         mode++;
         if (mode >= 4)
             mode = 0;
@@ -45,6 +49,18 @@ public class HUDController : MonoBehaviour
     public void DisableOrientationGizmo()
     {
         gizmoMesh.enabled = false;
+    }
+
+    public void SetLobes()
+    {
+        foreach (var layer in layer2)
+            layer.SetActive(!layer.activeInHierarchy);
+    }
+
+    public void SetVessels()
+    {
+        foreach (var layer in layer1)
+            layer.SetActive(!layer.activeInHierarchy);
     }
 
     private void ToggleLayers(int mode)

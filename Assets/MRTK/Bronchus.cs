@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HoverSelector : MonoBehaviour
+public class Bronchus : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] toggleOnHover;
-    
+
     // TODO:
     // - show rotation axis indicator
     // - show select toggle options?
@@ -26,5 +26,12 @@ public class HoverSelector : MonoBehaviour
         {
             item.SetActive(false);
         }
+    }
+
+    public void OnReset()
+    {
+        Camera mainCamera = Camera.main;
+        transform.SetPositionAndRotation(mainCamera.transform.position + mainCamera.transform.forward, Quaternion.identity);
+        transform.LookAt(mainCamera.transform);
     }
 }
