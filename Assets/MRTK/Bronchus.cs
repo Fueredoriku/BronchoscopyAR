@@ -16,7 +16,9 @@ public class Bronchus : MonoBehaviour
     {
         foreach (var item in toggleOnHover)
         {
+            item.transform.GetChild(0).localScale = Vector3.zero;
             item.SetActive(true);
+            LeanTween.scale(item.transform.GetChild(0).gameObject, Vector3.one, 0.5f).setEaseInOutElastic();
         }
     }
 
@@ -24,7 +26,13 @@ public class Bronchus : MonoBehaviour
     {
         foreach (var item in toggleOnHover)
         {
-            item.SetActive(false);
+            LeanTween.scale(item.transform.GetChild(0).gameObject, Vector3.zero, 0.5f).setEaseOutExpo()
+                .setOnComplete(() => 
+                    {
+                        item.SetActive(false);
+                        item.transform.GetChild(0).localScale = Vector3.one;
+                    });
+            
         }
     }
 
