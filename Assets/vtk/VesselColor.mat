@@ -26,13 +26,10 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHABLEND_ON
-  - _DIRECTIONAL_LIGHT
   - _DISABLE_ALBEDO_MAP
   - _HOVER_LIGHT
   - _LOCAL_SPACE_TRIPLANAR_MAPPING
-  - _NORMAL_MAP
   - _SPECULAR_HIGHLIGHTS
-  - _TRIPLANAR_MAPPING
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
@@ -142,7 +139,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DirectionalLight: 1
+    - _DirectionalLight: 0
     - _DstBlend: 10
     - _DstBlendAlpha: 0
     - _EdgeSmoothingValue: 0.002
@@ -150,10 +147,10 @@ Material:
     - _EnableEmission: 0
     - _EnableHoverColorOverride: 0
     - _EnableLocalSpaceTriplanarMapping: 1
-    - _EnableNormalMap: 1
+    - _EnableNormalMap: 0
     - _EnableProximityLightColorOverride: 0
     - _EnableSSAA: 0
-    - _EnableTriplanarMapping: 1
+    - _EnableTriplanarMapping: 0
     - _EnvironmentColorIntensity: 0.5
     - _EnvironmentColorThreshold: 1.5
     - _EnvironmentColoring: 0
@@ -225,7 +222,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.8207547, g: 0.6852527, b: 0.6852527, a: 1}
     - _ClippingBorderColor: {r: 1, g: 0.19999996, b: 0, a: 1}
-    - _Color: {r: 0.29089743, g: 0.23082057, b: 0.8584906, a: 0.043137256}
+    - _Color: {r: 0.29089737, g: 0.2308205, b: 0.8584906, a: 0.3529412}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
     - _EnvironmentColorX: {r: 1, g: 0, b: 0, a: 1}

@@ -29,9 +29,7 @@ Material:
   - _DISABLE_ALBEDO_MAP
   - _HOVER_LIGHT
   - _LOCAL_SPACE_TRIPLANAR_MAPPING
-  - _NORMAL_MAP
   - _SPECULAR_HIGHLIGHTS
-  - _TRIPLANAR_MAPPING
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
@@ -149,10 +147,10 @@ Material:
     - _EnableEmission: 0
     - _EnableHoverColorOverride: 0
     - _EnableLocalSpaceTriplanarMapping: 1
-    - _EnableNormalMap: 1
+    - _EnableNormalMap: 0
     - _EnableProximityLightColorOverride: 0
     - _EnableSSAA: 0
-    - _EnableTriplanarMapping: 1
+    - _EnableTriplanarMapping: 0
     - _EnvironmentColorIntensity: 0.5
     - _EnvironmentColorThreshold: 1.5
     - _EnvironmentColoring: 0

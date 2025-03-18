@@ -1231,7 +1231,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 1.5, z: 1.5}
+  m_Size: {x: 2, y: 1.5, z: 1.5}
   m_Center: {x: -1, y: -0.08, z: 0}
 --- !u!114 &1340693943
 MonoBehaviour:
@@ -1403,7 +1403,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 1.5, z: 1.5}
+  m_Size: {x: 2, y: 1.5, z: 1.5}
   m_Center: {x: 1, y: -0.08, z: 0}
 --- !u!114 &1459207267
 MonoBehaviour:
@@ -1465,7 +1465,7 @@ MonoBehaviour:
   rotateLerpTime: 0.001
   scaleLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 1340693945}
+  constraintsManager: {fileID: 1459207270}
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
@@ -1631,7 +1631,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.6, y: 0.6, z: 0.6}
+  m_Size: {x: 0.6, y: 0.6, z: 0.48}
   m_Center: {x: 0, y: 0.05, z: 0}
 --- !u!114 &1734331082
 MonoBehaviour:
@@ -1670,18 +1670,6 @@ MonoBehaviour:
       - m_Target: {fileID: 187844573}
         m_TargetAssemblyTypeName: HUDController, Assembly-CSharp
         m_MethodName: EnableOrientationGizmo
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1734331087}
-        m_TargetAssemblyTypeName: Bronchus, Assembly-CSharp
-        m_MethodName: OnHoverEnd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2797,7 +2785,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132149476969770}
-  m_Mesh: {fileID: -5658538432105157476, guid: 6a45302100db4e2409465db0f3766d7b, type: 3}
+  m_Mesh: {fileID: -5658538432105157476, guid: 647b85f9a7414ae43ac699a1f18d2cfb, type: 3}
 --- !u!33 &3469287837724612963
 MeshFilter:
   m_ObjectHideFlags: 0
