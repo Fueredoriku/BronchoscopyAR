@@ -1870,6 +1870,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - keyword: Test
+    response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1734331087}
+          m_TargetAssemblyTypeName: Bronchus, Assembly-CSharp
+          m_MethodName: OnTest
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   persistentKeywords: 0
   speechConfirmationTooltipPrefab: {fileID: 0}
 --- !u!114 &1734331087
@@ -1888,6 +1904,10 @@ MonoBehaviour:
   - {fileID: 1340693940}
   - {fileID: 1459207262}
   hud: {fileID: 187844573}
+  testMaterials:
+  - {fileID: 2100000, guid: 9608ad1272fd40540b67c733682fe6ee, type: 2}
+  - {fileID: 2100000, guid: 973c32cd869f03844909ae1df58d15b9, type: 2}
+  vessels: {fileID: 1711813854667591837}
 --- !u!1 &2056217476
 GameObject:
   m_ObjectHideFlags: 0
@@ -2898,7 +2918,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132148276031816}
-  m_Mesh: {fileID: 3494674524188282003, guid: 48d3bfb0f2e5da34eb2ed7fedf7f2343, type: 3}
+  m_Mesh: {fileID: -5321616015667223578, guid: e8fd2d567564cc246b78fed431ac91cf, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

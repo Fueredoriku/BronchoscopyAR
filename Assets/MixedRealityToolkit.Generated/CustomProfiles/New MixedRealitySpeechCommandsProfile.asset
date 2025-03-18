@@ -72,3 +72,10 @@ MonoBehaviour:
       id: 17
       description: Toggle Vessels
       axisConstraint: 2
+  - localizationKey: 
+    keyword: Test
+    keyCode: 98
+    action:
+      id: 19
+      description: Test
+      axisConstraint: 2
