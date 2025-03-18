@@ -63,6 +63,11 @@ public class HUDController : MonoBehaviour
             layer.SetActive(!layer.activeInHierarchy);
     }
 
+    public void ResetLayers()
+    {
+        ToggleLayers(0);
+    }
+
     private void ToggleLayers(int mode)
     {
         switch (mode)

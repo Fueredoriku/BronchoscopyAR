@@ -55,6 +55,20 @@ MonoBehaviour:
     keyword: Reset
     keyCode: 9
     action:
-      id: 6
-      description: Trigger
-      axisConstraint: 3
+      id: 16
+      description: Reset
+      axisConstraint: 0
+  - localizationKey: 
+    keyword: Lobes
+    keyCode: 8
+    action:
+      id: 18
+      description: Toggle Lobes
+      axisConstraint: 2
+  - localizationKey: 
+    keyword: Vessels
+    keyCode: 275
+    action:
+      id: 17
+      description: Toggle Vessels
+      axisConstraint: 2

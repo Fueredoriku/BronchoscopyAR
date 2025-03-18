@@ -7,6 +7,8 @@ public class Bronchus : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] toggleOnHover;
+    [SerializeField]
+    private HUDController hud;
 
     // TODO:
     // - show rotation axis indicator
@@ -25,21 +27,15 @@ public class Bronchus : MonoBehaviour
     public void OnHoverEnd()
     {
         foreach (var item in toggleOnHover)
-        {
-            LeanTween.scale(item.transform.GetChild(0).gameObject, Vector3.zero, 0.5f).setEaseOutExpo()
-                .setOnComplete(() => 
-                    {
-                        item.SetActive(false);
-                        item.transform.GetChild(0).localScale = Vector3.one;
-                    });
-            
-        }
+            item.SetActive(false);
     }
 
     public void OnReset()
     {
         Camera mainCamera = Camera.main;
         transform.SetPositionAndRotation(mainCamera.transform.position + mainCamera.transform.forward, Quaternion.identity);
+        transform.localScale = Vector3.one;
         transform.LookAt(mainCamera.transform);
+        hud.ResetLayers();
     }
 }

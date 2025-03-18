@@ -61,4 +61,10 @@ MonoBehaviour:
     axisConstraint: 0
   - id: 16
     description: Reset
-    axisConstraint: 0
+    axisConstraint: 2
+  - id: 17
+    description: Toggle Vessels
+    axisConstraint: 2
+  - id: 18
+    description: Toggle Lobes
+    axisConstraint: 2
