@@ -13,7 +13,6 @@ public class Bronchus : MonoBehaviour
     private Material[] testMaterials;
     [SerializeField]
     private Renderer vessels;
-    private int testIndex = 0;
 
     // TODO:
     // - show rotation axis indicator
@@ -37,11 +36,7 @@ public class Bronchus : MonoBehaviour
 
     public void OnTest()
     {
-        vessels.material = testMaterials[testIndex];
-        if (testIndex == 1)
-            testIndex = 0;
-        else
-            testIndex = 1;
+
     }
     public void OnReset()
     {
