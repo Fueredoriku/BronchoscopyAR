@@ -22,10 +22,9 @@ public class PathToTumorVisualizer : MonoBehaviour
     private VFXTextureFormatter positionBuffer;
     [SerializeField]
     private float particleScale = 0.01f;
-    [SerializeField]
-    private Vector3 positionOffset = Vector3.zero;
-    [SerializeField]
-    private Vector3 rotationOffset = Vector3.zero;
+    public Vector3 positionOffset = Vector3.zero;
+    public Vector3 rotationOffset = Vector3.zero;
+    public IEnumerable<Vector3> SampledPath {  get; private set; }
     private enum VTKSection
     {
         None,
@@ -36,7 +35,7 @@ public class PathToTumorVisualizer : MonoBehaviour
         Scalars
     }
 
-    void Start()
+    void Awake()
     {
         //binaryResource = Resources.Load("bronch") as TextAsset;
         vertices = new List<Vector3>();
@@ -69,6 +68,7 @@ public class PathToTumorVisualizer : MonoBehaviour
         NormalCount = 0;
         TriangleCount = triangles.Count;
         var sampledVertices = vertices.Where((item, index) => (index + 1) % 10 == 0).ToArray();
+        SampledPath = sampledVertices;
         positionBuffer = new VFXTextureFormatter(sampledVertices.Length);
         positionBuffer.setValues(sampledVertices);
         positionBuffer.ApplyChanges();
