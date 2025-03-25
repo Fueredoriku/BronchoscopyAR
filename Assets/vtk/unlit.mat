@@ -136,7 +136,7 @@ Material:
     - _ClippingBorderWidth: 0.025
     - _ColorWriteMask: 15
     - _Cull: 2
-    - _CullMode: 1
+    - _CullMode: 0
     - _CustomMode: 0
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1

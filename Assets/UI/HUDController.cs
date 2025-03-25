@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HUDController : MonoBehaviour
 {
@@ -18,6 +19,10 @@ public class HUDController : MonoBehaviour
     private int mode = 0;
     [SerializeField]
     private GameObject[] faceUserUI;
+    [SerializeField]
+    private Slider cutoutSlider;
+    [SerializeField]
+    private CutoutPath cutoutPath;
 
     //TODO:
     // - reset button above gizmo
@@ -61,6 +66,11 @@ public class HUDController : MonoBehaviour
     {
         foreach (var layer in layer1)
             layer.SetActive(!layer.activeInHierarchy);
+    }
+
+    public void SetPathLength()
+    {
+        cutoutPath.NormalizedPathPosition = cutoutSlider.value;
     }
 
     public void ResetLayers()
