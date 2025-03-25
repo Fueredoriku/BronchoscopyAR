@@ -11,11 +11,7 @@ public class CutoutPath : MonoBehaviour
     private Vector3[] travelPath;
     Vector3 oldPosition;
     [SerializeField, Range(0f, 1f)]
-    private float normalizedPathPosition = 0f;
-    public float NormalizedPathPosition
-    {
-        get { return normalizedPathPosition; } set { normalizedPathPosition = Mathf.Clamp(0f, 1f, value); } 
-    }
+    public float NormalizedPathPosition = 0f;
     private void Start()
     {
         travelPath = path.SampledPath.ToArray();
@@ -24,7 +20,7 @@ public class CutoutPath : MonoBehaviour
     }
     void Update()
     {
-        index = Mathf.RoundToInt(Mathf.Lerp(1, travelPath.Length - 2, normalizedPathPosition));
+        index = Mathf.RoundToInt(Mathf.Lerp(1, travelPath.Length - 2, NormalizedPathPosition));
         Vector3 currentPosition = -travelPath[index];
         oldPosition = -travelPath[index - 1];
         Vector3 nextPosition = -travelPath[index + 1];

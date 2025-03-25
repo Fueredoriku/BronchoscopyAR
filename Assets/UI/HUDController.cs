@@ -1,3 +1,4 @@
+using Microsoft.MixedReality.Toolkit.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +21,7 @@ public class HUDController : MonoBehaviour
     [SerializeField]
     private GameObject[] faceUserUI;
     [SerializeField]
-    private Slider cutoutSlider;
+    private PinchSlider cutoutSlider;
     [SerializeField]
     private CutoutPath cutoutPath;
 
@@ -70,7 +71,7 @@ public class HUDController : MonoBehaviour
 
     public void SetPathLength()
     {
-        cutoutPath.NormalizedPathPosition = cutoutSlider.value;
+        cutoutPath.NormalizedPathPosition = cutoutSlider.SliderValue;
     }
 
     public void ResetLayers()
