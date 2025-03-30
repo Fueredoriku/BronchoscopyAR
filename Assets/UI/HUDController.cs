@@ -74,6 +74,11 @@ public class HUDController : MonoBehaviour
         cutoutPath.NormalizedPathPosition = cutoutSlider.SliderValue;
     }
 
+    public void SetCutOutdirection(int index)
+    {
+        cutoutPath.CutOutMode = (CutoutPath.CutOutDirection) Mathf.RoundToInt(Mathf.Clamp(index, 0f,4f));
+    }
+
     public void ResetLayers()
     {
         ToggleLayers(0);
