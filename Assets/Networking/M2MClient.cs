@@ -1,6 +1,9 @@
+using Dummiesman;
 using M2MqttUnity;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using uPLibrary.Networking.M2Mqtt.Messages;
 
@@ -15,6 +18,10 @@ public class M2MClient : M2MqttUnityClient
     public Vector3 BronchoscopePosition => bronchoscopePosition;
     [SerializeField]
     private CutoutPath cutoutPath;
+    [SerializeField]
+    private PathToTumorVisualizer pathVisualizer;
+    [SerializeField]
+    private Transform anatomyHolder;
     // TODO: Recieve and handle bronchoscope position
     // TODO: Recieve each piece of selected anatomy
 
@@ -43,7 +50,27 @@ public class M2MClient : M2MqttUnityClient
                 }
                 break;
             case "M2MQTT_Unity/anatomy":
-                // TODO implement obj parser
+                // TODO: Split into seperate pieces of anatomy and attach correct material to each
+                try
+                {
+                    var textStream = new MemoryStream(Encoding.UTF8.GetBytes(msg));
+                    var loadedObj = new OBJLoader().Load(textStream);
+                    loadedObj.transform.SetParent(anatomyHolder, false);
+                }
+                catch
+                {
+                    Debug.Log("Failed reading anatomy values");
+                }
+                break;
+            case "M2MQTT_Unity/path":
+                try
+                {
+                    pathVisualizer.ParseProcessedData(msg);
+                }
+                catch
+                {
+                    Debug.Log("Failed reading path value");
+                }
                 break;
             default:
                 break;
@@ -98,11 +125,13 @@ public class M2MClient : M2MqttUnityClient
     {
         client.Subscribe(new string[] { "M2MQTT_Unity/bronchoscope" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
         client.Subscribe(new string[] { "M2MQTT_Unity/anatomy" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+        client.Subscribe(new string[] { "M2MQTT_Unity/path" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
     }
 
     protected override void UnsubscribeTopics()
     {
         client.Unsubscribe(new string[] { "M2MQTT_Unity/bronchoscope" });
         client.Unsubscribe(new string[] { "M2MQTT_Unity/anatomy" });
+        client.Unsubscribe(new string[] { "M2MQTT_Unity/path" });
     }
 }

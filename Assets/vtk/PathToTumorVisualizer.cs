@@ -83,6 +83,33 @@ public class PathToTumorVisualizer : MonoBehaviour
         //vertices.ForEach(vertex => Instantiate(drawPrefab, vertex/100f, Quaternion.identity, transform));
     }
 
+    public void ParseProcessedData(string message)
+    {
+        var binaryVertices = message;
+        string[] vertLines = Regex.Split(binaryVertices, "\r\n|\r|\n");
+        for (int i = 0; i < vertLines.Length; i++)
+        {
+            ParsePoints(vertLines[i]);
+        }
+        VertexCount = vertices.Count;
+        NormalCount = 0;
+        TriangleCount = triangles.Count;
+        var sampledVertices = vertices.Where((item, index) => (index + 1) % 10 == 0).ToArray();
+        SampledPath = sampledVertices;
+        positionBuffer = new VFXTextureFormatter(sampledVertices.Length);
+        positionBuffer.setValues(sampledVertices);
+        positionBuffer.ApplyChanges();
+        pathParticles.SetGraphicsBuffer("PathVertices", positionBuffer.Buffer);
+        pathParticles.SetFloat("Count", sampledVertices.Length);
+        pathParticles.Play();
+        pathParticles.transform.SetLocalPositionAndRotation(positionOffset, Quaternion.Euler(rotationOffset));
+        //StartCoroutine(WaitAndAdjustOffset());
+        // Optionally create a mesh
+        //CreateMesh();
+        //GenerateMesh();
+        //vertices.ForEach(vertex => Instantiate(drawPrefab, vertex/100f, Quaternion.identity, transform));
+    }
+
     private IEnumerator WaitAndAdjustOffset()
     {
         yield return new WaitForSeconds(2f);
