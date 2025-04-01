@@ -1,5 +1,6 @@
 using Dummiesman;
 using M2MqttUnity;
+using Microsoft.MixedReality.OpenXR;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -22,8 +23,31 @@ public class M2MClient : M2MqttUnityClient
     private PathToTumorVisualizer pathVisualizer;
     [SerializeField]
     private Transform anatomyHolder;
+    [SerializeField]
+    private ARMarkerManager markerManager;
     // TODO: Recieve and handle bronchoscope position
     // TODO: Recieve each piece of selected anatomy
+
+    protected override void Start()
+    {
+        markerManager.markersChanged += OnQRCodesChanged;
+        base.Start();
+    }
+
+    void OnQRCodesChanged(ARMarkersChangedEventArgs args)
+    {
+        foreach (ARMarker qrCode in args.added)
+        {
+            var text = qrCode.GetDecodedString();
+            // Expected formatting IP192.168.x.x
+            if (text.Contains("IP"))
+            {
+                brokerAddress = text[2..];
+                Connect();
+            }
+            Debug.Log($"QR code text: {text}");
+        }
+    }
 
     protected override void DecodeMessage(string topic, byte[] message)
     {
