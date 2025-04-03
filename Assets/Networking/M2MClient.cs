@@ -3,6 +3,7 @@ using M2MqttUnity;
 using Microsoft.MixedReality.OpenXR;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using UnityEngine;
@@ -66,7 +67,7 @@ public class M2MClient : M2MqttUnityClient
                     float z = float.Parse(numbers[2]);
                     bronchoscopePosition = new Vector3(x, y, z);
                     */
-                    cutoutPath.NormalizedPathPosition = float.Parse(msg);
+                    cutoutPath.NormalizedPathPosition = float.Parse(msg, CultureInfo.InvariantCulture);
                 }
                 catch 
                 {

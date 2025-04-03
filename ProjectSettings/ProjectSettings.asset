@@ -140,7 +140,10 @@ PlayerSettings:
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
   bundleVersion: 0.1
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 11400000, guid: b134d7456c4a43346a13fee1ff33f648, type: 2}
+  - {fileID: -2555454310561935327, guid: 87a8dfe4ebc642841abdfca4aeac8830, type: 2}
+  - {fileID: -1509361312616263947, guid: 8eb71e81bae250146aac6be9eae0e632, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -705,6 +708,8 @@ PlayerSettings:
   syncCapabilities: 0
   platformCapabilities:
     WindowsStoreApps:
+      PrivateNetworkClientServer: True
+      InternetClientServer: True
       SpatialPerception: True
       InternetClient: True
       WebCam: True

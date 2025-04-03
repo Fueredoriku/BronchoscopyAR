@@ -51,8 +51,14 @@ public class CutoutPath : MonoBehaviour
                 transform.GetChild(0).GetChild(0).localRotation = relativeDirection;
                 break;
             case CutOutDirection.camera:
-                transform.GetChild(0).LookAt(Camera.main.transform);
-                transform.GetChild(0).GetChild(0).localRotation = Quaternion.FromToRotation(Vector3.up, Vector3.back);
+                // TODO: All anatomy needs a holder parent which must have a postion offset akin to the pathpostion!!!
+                // This must be done before rotating so the origin is adjuster for where on the path we are.
+                transform.parent.parent.LookAt(Camera.main.transform);
+                //transform.parent.parent.localRotation *= Quaternion.FromToRotation(Vector3.up, Vector3.forward);
+                //transform.parent.parent.localRotation *= Quaternion.FromToRotation(oldPosition - currentPosition + (currentPosition - nextPosition), Vector3.up);
+                transform.GetChild(0).localRotation = relativeToParentRotation;
+                transform.GetChild(0).GetChild(0).localRotation = Quaternion.FromToRotation(Vector3.down, oldPosition - currentPosition + (currentPosition - nextPosition));
+                transform.parent.parent.forward = -transform.GetChild(0).GetChild(0).up;
                 break;
             case CutOutDirection.pathDirection:
                 transform.GetChild(0).localRotation = relativeToParentRotation;
