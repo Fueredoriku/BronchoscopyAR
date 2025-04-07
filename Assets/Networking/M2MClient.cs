@@ -81,6 +81,8 @@ public class M2MClient : M2MqttUnityClient
                     var textStream = new MemoryStream(Encoding.UTF8.GetBytes(msg));
                     var loadedObj = new OBJLoader().Load(textStream);
                     loadedObj.transform.SetParent(anatomyHolder, false);
+                    loadedObj.transform.localScale *= 0.0025f;
+                    loadedObj.transform.localRotation = Quaternion.FromToRotation(Vector3.up, Vector3.back);
                 }
                 catch
                 {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,19 @@ public class CutoutPath : MonoBehaviour
         oldPosition = travelPath[index];
         relativeToParentRotation = cutoutHolder.localRotation;
         relativeDirection = cutoutTransform.localRotation;
+        path.OnPathUpdated += UpdatePath;
     }
+
+    private void UpdatePath()
+    {
+        travelPath = path.SampledPath.ToArray();
+    }
+
+    private void OnDestroy()
+    {
+        path.OnPathUpdated -= UpdatePath;
+    }
+
     void Update()
     {
         index = Mathf.RoundToInt(Mathf.Lerp(1, travelPath.Length - 2, NormalizedPathPosition));

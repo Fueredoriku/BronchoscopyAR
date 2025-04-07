@@ -25,6 +25,9 @@ public class PathToTumorVisualizer : MonoBehaviour
     public Vector3 positionOffset = Vector3.zero;
     public Vector3 rotationOffset = Vector3.zero;
     public IEnumerable<Vector3> SampledPath {  get; private set; }
+
+    public delegate void PathEvent();
+    public PathEvent OnPathUpdated;
     private enum VTKSection
     {
         None,
@@ -85,6 +88,7 @@ public class PathToTumorVisualizer : MonoBehaviour
 
     public void ParseProcessedData(string message)
     {
+        vertices.Clear();
         var binaryVertices = message;
         string[] vertLines = Regex.Split(binaryVertices, "\r\n|\r|\n");
         for (int i = 0; i < vertLines.Length; i++)
@@ -103,6 +107,7 @@ public class PathToTumorVisualizer : MonoBehaviour
         pathParticles.SetFloat("Count", sampledVertices.Length);
         pathParticles.Play();
         pathParticles.transform.SetLocalPositionAndRotation(positionOffset, Quaternion.Euler(rotationOffset));
+        OnPathUpdated?.Invoke();
         //StartCoroutine(WaitAndAdjustOffset());
         // Optionally create a mesh
         //CreateMesh();
