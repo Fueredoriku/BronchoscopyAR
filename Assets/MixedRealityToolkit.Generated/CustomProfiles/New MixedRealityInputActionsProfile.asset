@@ -71,3 +71,12 @@ MonoBehaviour:
   - id: 19
     description: Test
     axisConstraint: 2
+  - id: 20
+    description: Toggle LandMarks
+    axisConstraint: 0
+  - id: 21
+    description: Toggle PET
+    axisConstraint: 0
+  - id: 22
+    description: Toggle Extra
+    axisConstraint: 0

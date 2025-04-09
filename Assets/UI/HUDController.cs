@@ -14,9 +14,15 @@ public class HUDController : MonoBehaviour
     private Renderer gizmoMesh;
     private Vector3 gizmoScaleOriginal;
     [SerializeField]
-    private GameObject[] layer1;
+    private GameObject[] lobeMesh;
     [SerializeField]
-    private GameObject[] layer2;
+    private GameObject[] vesselMesh;
+    [SerializeField]
+    private GameObject[] PETMesh;
+    [SerializeField]
+    private GameObject[] landmarkMesh;
+    [SerializeField]
+    private GameObject[] extraMesh;
     private int mode = 0;
     [SerializeField]
     private GameObject[] faceUserUI;
@@ -59,13 +65,31 @@ public class HUDController : MonoBehaviour
 
     public void SetLobes()
     {
-        foreach (var layer in layer2)
+        foreach (var layer in lobeMesh)
             layer.SetActive(!layer.activeInHierarchy);
     }
 
     public void SetVessels()
     {
-        foreach (var layer in layer1)
+        foreach (var layer in vesselMesh)
+            layer.SetActive(!layer.activeInHierarchy);
+    }
+
+    public void SetLandmarks()
+    {
+        foreach (var layer in landmarkMesh)
+            layer.SetActive(!layer.activeInHierarchy);
+    }
+
+    public void SetPET()
+    {
+        foreach (var layer in PETMesh)
+            layer.SetActive(!layer.activeInHierarchy);
+    }
+
+    public void SetExtra()
+    {
+        foreach (var layer in extraMesh)
             layer.SetActive(!layer.activeInHierarchy);
     }
 
@@ -81,7 +105,16 @@ public class HUDController : MonoBehaviour
 
     public void ResetLayers()
     {
-        ToggleLayers(0);
+        foreach (var layer in lobeMesh)
+            layer.SetActive(false);
+        foreach (var layer in vesselMesh)
+            layer.SetActive(false);
+        foreach (var layer in landmarkMesh)
+            layer.SetActive(false);
+        foreach (var layer in PETMesh)
+            layer.SetActive(false);
+        foreach (var layer in extraMesh)
+            layer.SetActive(false);
     }
 
     private void ToggleLayers(int mode)
@@ -89,27 +122,27 @@ public class HUDController : MonoBehaviour
         switch (mode)
         {
             case 0:
-                foreach (var layer in layer1)
+                foreach (var layer in vesselMesh)
                     layer.SetActive(false);
-                foreach (var layer2 in layer2)
+                foreach (var layer2 in lobeMesh)
                     layer2.SetActive(false);
                 break;
             case 1:
-                foreach (var layer in layer1)
+                foreach (var layer in vesselMesh)
                     layer.SetActive(true);
-                foreach (var layer2 in layer2)
+                foreach (var layer2 in lobeMesh)
                     layer2.SetActive(false);
                 break;
             case 2:
-                foreach (var layer in layer1)
+                foreach (var layer in vesselMesh)
                     layer.SetActive(false);
-                foreach (var layer2 in layer2)
+                foreach (var layer2 in lobeMesh)
                     layer2.SetActive(true);
                 break;
             case 3:
-                foreach (var layer in layer1)
+                foreach (var layer in vesselMesh)
                     layer.SetActive(true);
-                foreach (var layer2 in layer2)
+                foreach (var layer2 in lobeMesh)
                     layer2.SetActive(true);
                 break;
         }
