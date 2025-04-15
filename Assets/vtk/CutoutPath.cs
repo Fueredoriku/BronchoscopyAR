@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
 public class CutoutPath : MonoBehaviour
@@ -28,6 +30,8 @@ public class CutoutPath : MonoBehaviour
     private Transform anatomyParent;
     [SerializeField]
     private Transform anatomyHolder;
+    [SerializeField]
+    private Transform relativePivot;
     [SerializeField]
     private Transform cutoutHolder;
     [SerializeField]
@@ -76,23 +80,17 @@ public class CutoutPath : MonoBehaviour
                 cutoutTransform.localRotation = relativeDirection;
                 break;
             case CutOutDirection.camera:
-                // TODO: All anatomy needs a holder parent which must have a postion offset akin to the pathpostion!!!
-                // This must be done before rotating so the origin is adjuster for where on the path we are.
-                //transform.parent.parent.localRotation *= Quaternion.FromToRotation(Vector3.up, Vector3.forward);
-                //transform.parent.parent.localRotation *= Quaternion.FromToRotation(oldPosition - currentPosition + (currentPosition - nextPosition), Vector3.up);
-                //cutoutHolder.LookAt(Camera.main.transform);
-                //cutoutTransform.localRotation = Quaternion.FromToRotation(Vector3.up, Vector3.back);
-                anatomyHolder.localPosition = Quaternion.FromToRotation(Vector3.up, Vector3.back) * Quaternion.FromToRotation(Vector3.forward, Vector3.back) * (-currentPosition * 0.25f);
-                cutoutHolder.SetParent(anatomyParent);
+                transform.SetParent(relativePivot);
+                cutoutHolder.localPosition = currentPosition;
                 cutoutTransform.localRotation = Quaternion.FromToRotation(Vector3.down, oldPosition - currentPosition + (currentPosition - nextPosition));
-                //cutoutHolder.localRotation = relativeToParentRotation;
-                //anatomyHolder.localRotation = Quaternion.FromToRotation(Vector3.down, oldPosition - currentPosition + (currentPosition - nextPosition));
 
-                //anatomyParent.LookAt(Camera.main.transform);
-                /*
-                anatomyParent.rotation = Quaternion.FromToRotation(Vector3.forward, anatomyParent.position - Camera.main.transform.position)
-                    * Quaternion.Inverse(Quaternion.FromToRotation(Vector3.down, oldPosition - currentPosition + (currentPosition - nextPosition)));
-                */
+                Vector3 targetDir = (Camera.main.transform.position - cutoutTransform.position).normalized;
+                Vector3 childForward = -cutoutTransform.up;
+
+                Quaternion fromTo = Quaternion.FromToRotation(childForward, targetDir);
+                Quaternion targetRotation = fromTo * relativePivot.rotation;
+
+                relativePivot.rotation = Quaternion.Slerp(relativePivot.rotation, targetRotation, Time.deltaTime * 2f);
                 break;
             case CutOutDirection.pathDirection:
                 cutoutHolder.localPosition = currentPosition;
