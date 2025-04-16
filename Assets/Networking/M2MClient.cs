@@ -9,6 +9,12 @@ using System.Text;
 using UnityEngine;
 using uPLibrary.Networking.M2Mqtt.Messages;
 
+[System.Serializable]
+public struct Anatomy
+{
+    public string UrlName;
+    public Material material;
+}
 public class M2MClient : M2MqttUnityClient
 {
     [Tooltip("Set this to true to perform a testing cycle automatically on startup")]
@@ -28,7 +34,10 @@ public class M2MClient : M2MqttUnityClient
     private ARMarkerManager markerManager;
     // TODO: Recieve and handle bronchoscope position
     // TODO: Recieve each piece of selected anatomy
-
+    [SerializeField]
+    private GameObject downloadButton;
+    [SerializeField]
+    private Anatomy[] anatomy;
     protected override void Start()
     {
         markerManager.markersChanged += OnQRCodesChanged;
@@ -71,7 +80,7 @@ public class M2MClient : M2MqttUnityClient
                 }
                 catch 
                 {
-                    Debug.Log("Bronchoscope position was not formated correctly, expected Vector3");
+                    Debug.Log("Bronchoscope position was not formated correctly, expected float");
                 }
                 break;
             case "M2MQTT_Unity/anatomy":
@@ -113,7 +122,7 @@ public class M2MClient : M2MqttUnityClient
     {
         base.OnConnected();
         Debug.Log("Connected to broker on " + brokerAddress + "\n");
-        //TODO: Subscribe path?
+        downloadButton.SetActive(true);
     }
     protected override void OnConnectionFailed(string errorMessage)
     {
@@ -160,5 +169,13 @@ public class M2MClient : M2MqttUnityClient
         client.Unsubscribe(new string[] { "M2MQTT_Unity/bronchoscope" });
         client.Unsubscribe(new string[] { "M2MQTT_Unity/anatomy" });
         client.Unsubscribe(new string[] { "M2MQTT_Unity/path" });
+    }
+
+    public void DownloadAllMesh()
+    {
+        foreach (var item in anatomy)
+        {
+            //brokerAddress + "/" + item.UrlName;
+        }
     }
 }
