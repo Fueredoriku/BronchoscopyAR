@@ -35,6 +35,8 @@ public class CutoutPath : MonoBehaviour
     [SerializeField]
     private Transform cutoutHolder;
     [SerializeField]
+    private GameObject cutoutAirway;
+    [SerializeField]
     private Transform cutoutTransform;
     private Quaternion relativeToParentRotation;
     private Quaternion relativeDirection;
@@ -80,6 +82,7 @@ public class CutoutPath : MonoBehaviour
                 cutoutTransform.localRotation = relativeDirection;
                 break;
             case CutOutDirection.camera:
+                cutoutAirway.SetActive(true);
                 transform.SetParent(relativePivot);
                 cutoutHolder.localPosition = currentPosition;
                 cutoutTransform.localRotation = Quaternion.FromToRotation(Vector3.down, oldPosition - currentPosition + (currentPosition - nextPosition));
