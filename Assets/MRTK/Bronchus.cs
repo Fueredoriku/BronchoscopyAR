@@ -14,6 +14,8 @@ public class Bronchus : MonoBehaviour
     [SerializeField]
     private Renderer vessels;
     private int testIndex = 0;
+    [SerializeField]
+    private CutoutPath cutOut;
 
     // TODO:
     // - show rotation axis indicator
@@ -49,5 +51,6 @@ public class Bronchus : MonoBehaviour
         transform.localScale = Vector3.one;
         transform.LookAt(mainCamera.transform);
         hud.ResetLayers();
+        cutOut.ResetCut();
     }
 }

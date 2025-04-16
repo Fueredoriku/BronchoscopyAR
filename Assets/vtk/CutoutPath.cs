@@ -12,7 +12,7 @@ public class CutoutPath : MonoBehaviour
     public enum CutOutDirection
     {
         objectUp,
-        objectForward,
+        view,
         camera,
         pathDirection,
         pathDirectionTilted
@@ -24,7 +24,18 @@ public class CutoutPath : MonoBehaviour
     Vector3 oldPosition;
     [SerializeField, Range(0f, 1f)]
     public float NormalizedPathPosition = 0f;
-    public CutOutDirection CutOutMode = CutOutDirection.objectUp;
+    private CutOutDirection cutOutMode = CutOutDirection.pathDirection;
+    public CutOutDirection CutOutMode 
+    {
+        get { return cutOutMode; }
+        set 
+        {
+            cutoutAirway.SetActive(value == CutOutDirection.camera);
+            cutoutHolder.localRotation = relativeToParentRotation;
+            transform.SetParent(relativePivot);
+            cutOutMode = value;
+        }
+    }
 
     [SerializeField]
     private Transform anatomyParent;
@@ -40,8 +51,6 @@ public class CutoutPath : MonoBehaviour
     private Transform cutoutTransform;
     private Quaternion relativeToParentRotation;
     private Quaternion relativeDirection;
-    [SerializeField]
-    private float testScale = 0.1f;
     private void Start()
     {
         travelPath = path.SampledPath.ToArray();
@@ -68,7 +77,7 @@ public class CutoutPath : MonoBehaviour
         Vector3 currentPosition = -travelPath[index];
         oldPosition = -travelPath[index - 1];
         Vector3 nextPosition = -travelPath[index + 1];
-        //anatomyHolder.localPosition = cutoutHolder.rotation * -(currentPosition * testScale);
+
         switch (CutOutMode)
         {
             case CutOutDirection.objectUp:
@@ -76,14 +85,13 @@ public class CutoutPath : MonoBehaviour
                 cutoutHolder.rotation = anatomyParent.rotation;
                 cutoutTransform.localRotation = relativeDirection;
                 break;
-            case CutOutDirection.objectForward:
+            case CutOutDirection.view:
                 cutoutHolder.localPosition = currentPosition;
-                cutoutHolder.localRotation = relativeToParentRotation;
-                cutoutTransform.localRotation = relativeDirection;
+                cutoutHolder.LookAt(Camera.main.transform);
+                cutoutTransform.localRotation = Quaternion.FromToRotation(Vector3.up, Vector3.back);
                 break;
             case CutOutDirection.camera:
-                cutoutAirway.SetActive(true);
-                transform.SetParent(relativePivot);
+                
                 cutoutHolder.localPosition = currentPosition;
                 cutoutTransform.localRotation = Quaternion.FromToRotation(Vector3.down, oldPosition - currentPosition + (currentPosition - nextPosition));
 
@@ -108,5 +116,12 @@ public class CutoutPath : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void ResetCut()
+    {
+        cutOutMode = CutOutDirection.pathDirection;
+        relativePivot.localRotation = Quaternion.identity;
+        NormalizedPathPosition = 0f;
     }
 }
