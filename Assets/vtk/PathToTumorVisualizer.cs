@@ -86,6 +86,19 @@ public class PathToTumorVisualizer : MonoBehaviour
         //vertices.ForEach(vertex => Instantiate(drawPrefab, vertex/100f, Quaternion.identity, transform));
     }
 
+    public void SetPathAliveIndex(int index)
+    {
+        int length = positionBuffer.Size;
+        float[] values = new float[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            values[i] = (i < index) ? 0f : 1f;
+        }
+        positionBuffer.setAlphas(values);
+        positionBuffer.ApplyChanges();
+    }
+
     public void ParseProcessedData(string message)
     {
         vertices.Clear();

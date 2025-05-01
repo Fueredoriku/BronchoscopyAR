@@ -20,6 +20,7 @@ public class CutoutPath : MonoBehaviour
     [SerializeField]
     private PathToTumorVisualizer path;
     private int index = 0;
+    private int oldIndex = 0;
     private Vector3[] travelPath;
     Vector3 oldPosition;
     [SerializeField, Range(0f, 1f)]
@@ -31,11 +32,12 @@ public class CutoutPath : MonoBehaviour
         set 
         {
             cutoutAirway.SetActive(value == CutOutDirection.camera);
+            path.SetPathAliveIndex(value == CutOutDirection.camera ? index : 1);
             cutoutHolder.localRotation = relativeToParentRotation;
             transform.SetParent(relativePivot);
             cutOutMode = value;
             relativePivot.localScale = Vector3.one;
-            bronchocopeGizmo.localScale = Vector3.one;
+            bronchocopeGizmo.localScale = bronchocopeGizmoScale;
         }
     }
 
@@ -53,6 +55,7 @@ public class CutoutPath : MonoBehaviour
     private Transform cutoutTransform;
     [SerializeField]
     private Transform bronchocopeGizmo;
+    private Vector3 bronchocopeGizmoScale = new(0.05f, 0.05f, 0.05f);
     [SerializeField]
     private GameObject ctEstimate;
     private Material ctMaterial;
@@ -68,6 +71,7 @@ public class CutoutPath : MonoBehaviour
         path.OnPathUpdated += UpdatePath;
         ctMaterial = Instantiate(ctEstimate.GetComponent<Renderer>().material);
         ctEstimate.GetComponent<Renderer>().material = ctMaterial;
+        bronchocopeGizmoScale = bronchocopeGizmo.localScale;
     }
 
     private void UpdatePath()
@@ -113,8 +117,11 @@ public class CutoutPath : MonoBehaviour
                 relativePivot.rotation = Quaternion.Slerp(relativePivot.rotation, targetRotation, Time.deltaTime * 2f);
                 var t = (float)index / travelPath.Length;
                 var quint = t * t * t * t * t;
-                relativePivot.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 5f, quint);
-                bronchocopeGizmo.localScale = Vector3.one * 1f/(quint);
+                relativePivot.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 4f, quint);
+                bronchocopeGizmo.localScale = bronchocopeGizmoScale * (1f - quint);
+                if (oldIndex != index)
+                    path.SetPathAliveIndex(index);
+                oldIndex = index;
                 break;
             case CutOutDirection.pathDirection:
                 cutoutHolder.localPosition = currentPosition;

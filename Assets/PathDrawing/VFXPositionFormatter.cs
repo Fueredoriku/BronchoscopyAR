@@ -11,7 +11,7 @@ public class VFXTextureFormatter : IDisposable
 
     // Size of the texture, typically the maximum number of particles or the number of patricles in each strip
     private int size;
-
+    public int Size => size;
     // The resulting texture
     public GraphicsBuffer Buffer { get => buffer; }
 
@@ -41,6 +41,7 @@ public class VFXTextureFormatter : IDisposable
         data[index * 4] = value.x;
         data[index * 4 + 1] = value.y;
         data[index * 4 + 2] = value.z;
+        data[index * 4 + 3] = 1f;
     }
 
     /// <summary>
@@ -54,6 +55,7 @@ public class VFXTextureFormatter : IDisposable
             data[i * 4] = values[i].x;
             data[i * 4 + 1] = values[i].y;
             data[i * 4 + 2] = values[i].z;
+            data[i * 4 + 3] = 1f;
         }
     }
 
