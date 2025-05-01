@@ -34,6 +34,8 @@ public class CutoutPath : MonoBehaviour
             cutoutHolder.localRotation = relativeToParentRotation;
             transform.SetParent(relativePivot);
             cutOutMode = value;
+            relativePivot.localScale = Vector3.one;
+            bronchocopeGizmo.localScale = Vector3.one;
         }
     }
 
@@ -49,6 +51,11 @@ public class CutoutPath : MonoBehaviour
     private GameObject cutoutAirway;
     [SerializeField]
     private Transform cutoutTransform;
+    [SerializeField]
+    private Transform bronchocopeGizmo;
+    [SerializeField]
+    private GameObject ctEstimate;
+    private Material ctMaterial;
     private Quaternion relativeToParentRotation;
     private Quaternion relativeDirection;
     private void Start()
@@ -59,6 +66,8 @@ public class CutoutPath : MonoBehaviour
         relativeToParentRotation = cutoutHolder.localRotation;
         relativeDirection = cutoutTransform.localRotation;
         path.OnPathUpdated += UpdatePath;
+        ctMaterial = Instantiate(ctEstimate.GetComponent<Renderer>().material);
+        ctEstimate.GetComponent<Renderer>().material = ctMaterial;
     }
 
     private void UpdatePath()
@@ -102,6 +111,10 @@ public class CutoutPath : MonoBehaviour
                 Quaternion targetRotation = fromTo * relativePivot.rotation;
 
                 relativePivot.rotation = Quaternion.Slerp(relativePivot.rotation, targetRotation, Time.deltaTime * 2f);
+                var t = (float)index / travelPath.Length;
+                var quint = t * t * t * t * t;
+                relativePivot.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 5f, quint);
+                bronchocopeGizmo.localScale = Vector3.one * 1f/(quint);
                 break;
             case CutOutDirection.pathDirection:
                 cutoutHolder.localPosition = currentPosition;
@@ -116,6 +129,16 @@ public class CutoutPath : MonoBehaviour
             default:
                 break;
         }
+
+        if (ctEstimate.activeInHierarchy)
+        {
+            Vector3 basePos = -travelPath[1];
+            ctMaterial.SetVector("_RelativePosition", relativePivot.position);
+            Quaternion inverseRotationQuat = Quaternion.Euler(180f, 0f, 90f) * Quaternion.Inverse(relativePivot.rotation); ;
+            Vector4 inverseParentRotation = new (inverseRotationQuat.x, inverseRotationQuat.y, inverseRotationQuat.z, inverseRotationQuat.w);
+            ctMaterial.SetVector("_RotationQuat", inverseParentRotation);
+            ctMaterial.SetVector("_RelativeScale", new Vector4(1/relativePivot.localScale.x, 1/relativePivot.localScale.y, 1/relativePivot.localScale.z) * 2f);
+        }
     }
 
     public void ResetCut()
@@ -123,5 +146,10 @@ public class CutoutPath : MonoBehaviour
         cutOutMode = CutOutDirection.pathDirection;
         relativePivot.localRotation = Quaternion.identity;
         NormalizedPathPosition = 0f;
+    }
+
+    public void ToggleCT()
+    {
+        ctEstimate.SetActive(!ctEstimate.activeInHierarchy);
     }
 }
