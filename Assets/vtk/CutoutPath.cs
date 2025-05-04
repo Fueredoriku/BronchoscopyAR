@@ -141,7 +141,7 @@ public class CutoutPath : MonoBehaviour
         {
             Vector3 basePos = -travelPath[1];
             ctMaterial.SetVector("_RelativePosition", relativePivot.position);
-            Quaternion inverseRotationQuat = Quaternion.Euler(180f, 0f, 90f) * Quaternion.Inverse(relativePivot.rotation); ;
+            Quaternion inverseRotationQuat = Quaternion.Euler(180f, 0f, 90f) * Quaternion.Inverse(relativePivot.rotation);
             Vector4 inverseParentRotation = new (inverseRotationQuat.x, inverseRotationQuat.y, inverseRotationQuat.z, inverseRotationQuat.w);
             ctMaterial.SetVector("_RotationQuat", inverseParentRotation);
             ctMaterial.SetVector("_RelativeScale", new Vector4(1/relativePivot.localScale.x, 1/relativePivot.localScale.y, 1/relativePivot.localScale.z) * 2f);
