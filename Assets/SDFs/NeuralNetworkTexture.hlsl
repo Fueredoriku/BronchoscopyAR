@@ -124,9 +124,11 @@ Material closest_material_float(float distance1, float distance2, Material mt1, 
 }
 
 
-Texture2D<float4> _WeightMatTex;
-Texture2D<float4> _WeightVecTex;
-SamplerState _PointClamp;
+Texture2D _WeightVecTex;
+SamplerState sampler_WeightVecTex;
+
+Texture2D _WeightMatTex;
+SamplerState sampler_WeightMatTex;
 
 
 cbuffer FFNParams
@@ -144,37 +146,56 @@ cbuffer FFNParams
     int _OffOutB;
 };
 
-float4 LoadVec_float(int index)
+int _WeightVecTex_TexelWidth;
+int _WeightMatTex_TexelWidth;
+int _WeightMatTex_TexelHeight;
+
+int2 UnpackIndex_half(int index, int texWidth)
 {
-    return _WeightVecTex.Load(int3(0, index, 0));
+    return int2(index % texWidth, index / texWidth);
 }
 
-
-float3 LoadB_float(int i)
+// Bias vector access (float4 at offset)
+float4 LoadBias_half(int off, int chunk)
 {
-    return LoadVec_float(_OffB + i).xyz;
+    int index = off + chunk;
+    int2 uv = UnpackIndex_half(index, _WeightVecTex_TexelWidth);
+    return _WeightVecTex.Load(int3(uv, 0));
 }
 
-
-float4 LoadBias_float(int off, int chunk)
+// B vector access (float3 from float4.xyz at offset)
+float3 LoadB_half(int i)
 {
-    return LoadVec_float(off + chunk);
+    int index = _OffB + i;
+    int2 uv = UnpackIndex_half(index, _WeightVecTex_TexelWidth);
+    return _WeightVecTex.Load(int3(uv, 0)).xyz;
 }
 
-
-float4x4 LoadMat_float(int off, int matIdx)
+// Matrix access (fetch 4 rows as float4s)
+float4x4 LoadMat_half(int off, int matIdx)
 {
-    int baseIdx = off + (matIdx * 4);
-    float4 row0 = _WeightMatTex.Load(int3(0, baseIdx + 0, 0));
-    float4 row1 = _WeightMatTex.Load(int3(0, baseIdx + 1, 0));
-    float4 row2 = _WeightMatTex.Load(int3(0, baseIdx + 2, 0));
-    float4 row3 = _WeightMatTex.Load(int3(0, baseIdx + 3, 0));
+    int baseRow = (off + matIdx) * 4;
+    int2 uv0 = UnpackIndex_half(baseRow + 0, _WeightMatTex_TexelWidth);
+    int2 uv1 = UnpackIndex_half(baseRow + 1, _WeightMatTex_TexelWidth);
+    int2 uv2 = UnpackIndex_half(baseRow + 2, _WeightMatTex_TexelWidth);
+    int2 uv3 = UnpackIndex_half(baseRow + 3, _WeightMatTex_TexelWidth);
+
+    float4 row0 = _WeightMatTex.Load(int3(uv0, 0));
+    float4 row1 = _WeightMatTex.Load(int3(uv1, 0));
+    float4 row2 = _WeightMatTex.Load(int3(uv2, 0));
+    float4 row3 = _WeightMatTex.Load(int3(uv3, 0));
+    
     return float4x4(row0, row1, row2, row3);
 }
 
-
-float model_occ_float(float3 p, out float result)
+int2 WrapUV_half(int2 uv, int2 texSize)
 {
+    return (uv % texSize + texSize) % texSize;
+}
+
+float model_occ_half(float3 p, out float result)
+{
+
     twoPI = 6.28318530718;
     result = 0;
     // --- INPUT LAYER → f[0]…f[_Chunks-1] ---
@@ -185,7 +206,7 @@ float model_occ_float(float3 p, out float result)
         // for each Fourier feature
         for (int fi = 0; fi < _L; ++fi)
         {
-            float3 b = LoadB_float(fi);
+            float3 b = LoadB_half(fi);
             float x = dot(p, b) * twoPI;
             float s = sin(x);
             float c_ = cos(x);
@@ -193,17 +214,17 @@ float model_occ_float(float3 p, out float result)
             // sin‐weights are in the first (_L/4)*_Chunks mats
             int sinBlockBase = _OffInW;
             int sinIdx = (fi / 4) * _Chunks + c;
-            float4x4 Wsin = LoadMat_float(sinBlockBase, sinIdx);
+            float4x4 Wsin = LoadMat_half(sinBlockBase, sinIdx);
             acc += s * Wsin[fi & 3];
 
             // cos‐weights follow right after
             int cosBlockBase = _OffInW + (_L / 4) * _Chunks;
             int cosIdx = (fi / 4) * _Chunks + c;
-            float4x4 Wcos = LoadMat_float(cosBlockBase, cosIdx);
+            float4x4 Wcos = LoadMat_half(cosBlockBase, cosIdx);
             acc += c_ * Wcos[fi & 3];
         }
         // bias + ReLU
-        acc += LoadBias_float(_OffInB, c);
+        acc += LoadBias_half(_OffInB, c);
         f[c] = max(acc, float4(0, 0, 0, 0));
     }
 
@@ -220,10 +241,10 @@ float model_occ_float(float3 p, out float result)
             for (int d = 0; d < _Chunks; ++d)
             {
                 int matIdx = (d * _Chunks) + c;
-                float4x4 W = LoadMat_float(wOff, matIdx);
+                float4x4 W = LoadMat_half(wOff, matIdx);
                 acc += mul(W, f[d]);
             }
-            acc += LoadBias_float(bOff, c);
+            acc += LoadBias_half(bOff, c);
             nextF[c] = max(acc, float4(0, 0, 0, 0));
         }
         // swap f ← nextF
@@ -237,12 +258,12 @@ float model_occ_float(float3 p, out float result)
     for (int c = 0; c < _Chunks; ++c)
     {
         // we stored output weights as _Chunks sequential float4 blocks
-        float4 w4 = LoadMat_float(_OffOutW, c)[0];
+        float4 w4 = LoadMat_half(_OffOutW, c)[0];
         // here we assume each row of that mat has the 4 weights we need
         result += dot(w4, f[c]);
     }
     // final bias is a single float in the .x of a vec4
-    result += LoadBias_float(_OffOutB, 0).x;
+    result += LoadBias_half(_OffOutB, 0).x;
     return result;
 }
 

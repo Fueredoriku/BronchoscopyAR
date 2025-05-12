@@ -435,6 +435,21 @@ public class FFNOccupancyLoader : MonoBehaviour
         int matCount = weightMats.Count;
         int vecCount = weightVecs.Count;
 
+        List<Vector4> matData = new();
+        foreach (var mat in weightMats)
+        {
+            matData.Add(mat.GetRow(0));
+            matData.Add(mat.GetRow(1));
+            matData.Add(mat.GetRow(2));
+            matData.Add(mat.GetRow(3));
+        }
+        var matTex = MakeFloat4Texture(matData, 1, matData.Count); // height = 4 * matrixCount
+        targetMaterial.SetTexture("_WeightMatTex", matTex);
+
+        var vecTex = MakeFloat4Texture(weightVecs, 1, weightVecs.Count);
+        targetMaterial.SetTexture("_WeightVecTex", vecTex);
+
+        /*
         // 2. Create / upload the ComputeBuffers
         _matBuf = new ComputeBuffer(matCount, 16 * sizeof(float));
         _matBuf.SetData(weightMats);
@@ -445,7 +460,7 @@ public class FFNOccupancyLoader : MonoBehaviour
         // 3. Bind to the material along with your meta‐parameters
         targetMaterial.SetBuffer("_WeightMats", _matBuf);
         targetMaterial.SetBuffer("_WeightVecs", _vecBuf);
-
+        */
         // Suppose you’ve computed these on the C# side:
         /* # Fourier freqs */
         int L = 64;
@@ -483,6 +498,24 @@ public class FFNOccupancyLoader : MonoBehaviour
         targetMaterial.SetInt("_OffOutW", offOutW);
         targetMaterial.SetInt("_OffOutB", offOutB);
     }
+
+    Texture2D MakeFloat4Texture(List<Vector4> data, int width, int height)
+    {
+        var tex = new Texture2D(width, height, TextureFormat.RGBAFloat, false, true);
+        tex.filterMode = FilterMode.Point;
+        tex.wrapMode = TextureWrapMode.Clamp;
+
+        Color[] pixels = new Color[width * height];
+        for (int i = 0; i < data.Count; i++)
+        {
+            pixels[i] = data[i]; // Color implicitly converts from Vector4
+        }
+
+        tex.SetPixels(pixels);
+        tex.Apply(false, true); // make it non-readable after upload
+        return tex;
+    }
+
 
     void OnDestroy()
     {
