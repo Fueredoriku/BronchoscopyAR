@@ -55,7 +55,7 @@ public class CutoutPath : MonoBehaviour
     private Transform cutoutTransform;
     [SerializeField]
     private Transform bronchocopeGizmo;
-    private Vector3 bronchocopeGizmoScale = new(0.05f, 0.05f, 0.05f);
+    private Vector3 bronchocopeGizmoScale = new(0.025f, 0.025f, 0.025f);
     [SerializeField]
     private GameObject ctEstimate;
     private Material ctMaterial;
@@ -106,7 +106,7 @@ public class CutoutPath : MonoBehaviour
             case CutOutDirection.camera:
                 
                 cutoutHolder.localPosition = currentPosition;
-                cutoutTransform.localRotation = Quaternion.FromToRotation(Vector3.down, oldPosition - currentPosition + (currentPosition - nextPosition));
+                cutoutTransform.localRotation = Quaternion.FromToRotation(Vector3.down, oldPosition - nextPosition);
 
                 Vector3 targetDir = (Camera.main.transform.position - cutoutTransform.position).normalized;
                 Vector3 childForward = -cutoutTransform.up;
@@ -126,7 +126,7 @@ public class CutoutPath : MonoBehaviour
             case CutOutDirection.pathDirection:
                 cutoutHolder.localPosition = currentPosition;
                 cutoutHolder.localRotation = relativeToParentRotation;
-                cutoutTransform.localRotation = Quaternion.FromToRotation(Vector3.down, oldPosition - currentPosition + (currentPosition - nextPosition)); 
+                cutoutTransform.localRotation = Quaternion.FromToRotation(Vector3.down, oldPosition - nextPosition); 
                 break;
             case CutOutDirection.pathDirectionTilted:
                 cutoutHolder.localPosition = currentPosition;
