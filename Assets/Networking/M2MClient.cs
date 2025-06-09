@@ -76,6 +76,7 @@ public class M2MClient : M2MqttUnityClient
                     float z = float.Parse(numbers[2]);
                     bronchoscopePosition = new Vector3(x, y, z);
                     */
+                    Debug.Log(System.DateTime.Now.ToString("HH:mm:ss.fff"));
                     cutoutPath.NormalizedPathPosition = float.Parse(msg, CultureInfo.InvariantCulture);
                 }
                 catch 

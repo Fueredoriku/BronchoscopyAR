@@ -118,7 +118,7 @@ public class CutoutPath : MonoBehaviour
                 var t = (float)index / travelPath.Length;
                 var quint = t * t * t * t * t;
                 relativePivot.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 4f, quint);
-                bronchocopeGizmo.localScale = bronchocopeGizmoScale * (1f - quint);
+                bronchocopeGizmo.localScale = bronchocopeGizmoScale * (1f - quint) * 0.5f;
                 if (oldIndex != index)
                     path.SetPathAliveIndex(index);
                 oldIndex = index;
