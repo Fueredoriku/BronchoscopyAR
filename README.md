@@ -1,11 +1,15 @@
-# Interactive augmented reality depth debugger with sphere tracing
-Drag a plane through 3D space to investigate the distance field between the hololens depth buffer and virtualy rendered SDFs.
-This tool enables debugging of how the distance fields in a composite scene interacts so one can avoid unwanted artifacts in the SDFs.
+# Bronchoscopy navigation Augmented Reality tool
+A tool for visualizing bronchial tree and surrounding anatomy segmented in Fraxinus in augmented reality for better depth perception and navigation.
 
 # Motivation
-- Debugging distance fields without any visual cues is pretty hard, and XR is a good way of getting much needed depth perception.
-- Having SDFs interact with a composite scene enables SDFs that can interact in a convincing way with an augmented reality environmnent.
-   - An example could be to get an SDF to slightly meld into the hololens generated point cloud geometry.
+Bronchoscopy is a hard procedure to master, as clinicians have to create a mental
+map of a complex bronchial tree structure in order to properly navigate, which
+requires a lot of hands-on time with experts to learn. Some existing visualization
+tools like Fraxinus can produce visual routes within a bronchial tree on a 2D
+screen to help with intraoperative navigation. This thesis aims to create a 3D AR
+bronchial tree visualization using the data from Fraxinus in order to understand
+if there is any potential benefits of using such a visualization for bronchoscopy
+compared to traditional 2D screen visualizations for bronchoscopy.
 
 ### Build and deploy
 
@@ -21,5 +25,5 @@ Download the necessary packages from the visual studio installer, mainly those r
 5. Run build solution in Build -> Build Solution
 6. Open: Project -> Publish -> Create app packages
 7. Choose sideloading, auto generate and add certificate, and choose only the ARMx64 checkbox.
-8. After build and packaging completes, you can now manually upload the generated SDF-AR.appx file through the hololens device portal.
-# BronchoscopyAR
+8. After build and packaging completes, you can now manually upload the generated BronchoscopyAR.appx file through the hololens device portal.
+- Note: If you get an .msix, the network permissions will not be correct, so you must downgrade your build tools!
